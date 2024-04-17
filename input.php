@@ -1,3 +1,5 @@
+
+
 <!doctype html>
 <html>
 	<head>
@@ -6,7 +8,8 @@
 	</head>
 	<body>
 
-        <form id="frmInput" name="frmInput" method="post" action="input_do.php">
+
+        <form id="frmInput" name="frmInput" method="post" action="">
 
             <p><label for="title_name">タイトル</label></p>
             <input type="text" name="title_name" id="title_name">
@@ -21,18 +24,52 @@
         
         <h1>一覧</h1>
         
-        
+
         <?php
-        // ファイル名を指定
-        $filename = 'matome/matome.txt';
+            date_default_timezone_set('Asia/Tokyo');
+           
+               
+                    if(isset($_POST['title_name'], $_POST['message_name'])) {
 
-        // ファイルの内容を読み込む
-        $content = file_get_contents($filename);
+                      
+    
+                    //post取得
+                    $fp = fopen("data/" . date("Ymd") . ".txt", "a");
+                    $fp_matome = fopen("matome/matome.txt", "a");
+                    $write_str = $_POST['title_name'] . "\t" . $_POST['message_name'] . "\n";
 
+                    // 空かどうかをチェックする
+                    if (!empty($_POST['title_name'].$_POST['message_name'])) {
 
-        // 内容をHTMLの段落として表示する
-        echo '<p>' . $content . '</p>';
+                        
+                    //空じゃなかったらファイルに書き込む
+                    fwrite($fp, $write_str);
+                    fwrite($fp_matome, $write_str);
+                    fclose($fp);
+
+                    // POST処理の最後にリダイレクト処理
+                    header("Location:http://localhost:8888/input.php");
+                    exit();  }
+                    }
+
+                    
+
+                    //ファイルを開いて表示
+                        $fileName = "matome/matome.txt";    
+                        $file = fopen($fileName, "r");
+        
+                        while (!feof($file)) {
+                    
+                        
+                        $str = fgets($file);
+                        print "$str<BR>";
+                    }
+                        fclose($file);         
+
         ?>
+        
 
 	</body>
+  
+
 </html>
