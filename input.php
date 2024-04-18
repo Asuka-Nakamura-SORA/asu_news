@@ -2,12 +2,21 @@
 <html>
 	<head>
 		<meta charset="utf-8">
-		<h1>ニューーーーーす</h1>
+        
+        <script>
+        function fmconfirm(){
+        if(window.confirm('投稿しますか？')){
+        return true; 
+        } else {
+            window.alert("投稿をキャンセルしました。");
+            return false;
+        }
+    }   </script>
+		
 	</head>
 	<body>
-
-
-        <form id="frmInput" name="frmInput" method="post" action="">
+    <h1>ニューーーーーす</h1>
+        <form id="frmInput" name="frmInput" method="post" action="" onsubmit="return fmconfirm()">
 
             <p><label for="title_name">タイトル</label></p>
             <input type="text" name="title_name" id="title_name">
@@ -20,7 +29,9 @@
         </form>
 
         
+        
         <h1>一覧</h1>
+
         
 <?php
     date_default_timezone_set('Asia/Tokyo');
@@ -30,9 +41,13 @@
         $fp = fopen("data/" . date("Ymd") . ".txt", "a");
         $fp_matome = fopen("matome/matome.txt", "a");
         $write_str = $_POST['title_name'] . "\t" . $_POST['message_name'] . "\n";
+        
 
         //条件をチェックする
-        if (empty($_POST['title_name'])){
+        if(empty($_POST['title_name']) and empty($_POST['message_name'])){
+            echo $alert = "<script type='text/javascript'>alert('タイトルと内容を記入してください。');</script>";
+
+        }elseif(empty($_POST['title_name'])){
             echo $alert = "<script type='text/javascript'>alert('タイトルを記入してください。');</script>";
 
         }elseif(empty($_POST['message_name'])){
@@ -40,9 +55,10 @@
 
         }elseif(strlen($_POST['title_name']) > 30){
             echo $alert = "<script type='text/javascript'>alert('タイトルは30文字以下で記入してください');</script>";
-
+           
         }else{
-        //条件を全て満たしていたらファイルに書き込む
+               
+        //条件を全て満たしたらファイルに書き込む
         fwrite($fp, $write_str);
         fwrite($fp_matome, $write_str);
         fclose($fp);
@@ -53,19 +69,15 @@
         }
     }
 
-                    
-
-                    //ファイルを開いて表示
-                        $fileName = "matome/matome.txt";    
-                        $file = fopen($fileName, "r");
+        //ファイルを開いて表示
+        $fileName = "matome/matome.txt";    
+        $file = fopen($fileName, "r");
+        while (!feof($file)) {
+        $str = fgets($file);
+        print "$str<BR>";
+        }
+        fclose($file);  
         
-                        while (!feof($file)) {
-                    
-                        
-                        $str = fgets($file);
-                        print "$str<BR>";
-    }
-                        fclose($file);         
 ?>
         
 
