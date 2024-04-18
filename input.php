@@ -11,7 +11,8 @@
             window.alert("投稿をキャンセルしました。");
             return false;
         }
-    }   </script>
+        }   
+        </script>
 		
 	</head>
 	<body>
@@ -27,10 +28,8 @@
             <p><input type="submit" value="投稿"></p>
 
         </form>
-
-        
-        
-        <h1>一覧</h1>
+     
+    <h1>一覧</h1>
 
         
 <?php
@@ -74,14 +73,13 @@
         $file = fopen($fileName, "r");
         while (!feof($file)) {
         $str = fgets($file);
-        print "$str<BR>";
+        
+        print "$str"."<BR>記事全文・コメントを読む<BR>";
+        
         }
         fclose($file);  
         
 ?>
         
-
 	</body>
-  
-
 </html>
