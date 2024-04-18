@@ -74,9 +74,10 @@
         while (!feof($file)) {
         $str = fgets($file);
         
-        print "$str"."<BR>記事全文・コメントを読む<BR>";
-        
+        if(!empty($str)){
+            print "$str<BR>"."記事全文・コメントを読む<BR><BR>";
         }
+       }
         fclose($file);  
         
 ?>
