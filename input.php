@@ -1,10 +1,8 @@
-
-
 <!doctype html>
 <html>
 	<head>
 		<meta charset="utf-8">
-		<h1>news</h1>
+		<h1>ニューーーーーす</h1>
 	</head>
 	<body>
 
@@ -24,33 +22,36 @@
         
         <h1>一覧</h1>
         
-
-        <?php
-            date_default_timezone_set('Asia/Tokyo');
-           
-               
-                    if(isset($_POST['title_name'], $_POST['message_name'])) {
-
-                      
+<?php
+    date_default_timezone_set('Asia/Tokyo');
+    if(isset($_POST['title_name'], $_POST['message_name'])) {
     
-                    //post取得
-                    $fp = fopen("data/" . date("Ymd") . ".txt", "a");
-                    $fp_matome = fopen("matome/matome.txt", "a");
-                    $write_str = $_POST['title_name'] . "\t" . $_POST['message_name'] . "\n";
+        //post取得
+        $fp = fopen("data/" . date("Ymd") . ".txt", "a");
+        $fp_matome = fopen("matome/matome.txt", "a");
+        $write_str = $_POST['title_name'] . "\t" . $_POST['message_name'] . "\n";
 
-                    // 空かどうかをチェックする
-                    if (!empty($_POST['title_name'].$_POST['message_name'])) {
+        //条件をチェックする
+        if (empty($_POST['title_name'])){
+            echo $alert = "<script type='text/javascript'>alert('タイトルを記入してください。');</script>";
 
-                        
-                    //空じゃなかったらファイルに書き込む
-                    fwrite($fp, $write_str);
-                    fwrite($fp_matome, $write_str);
-                    fclose($fp);
+        }elseif(empty($_POST['message_name'])){
+            echo $alert = "<script type='text/javascript'>alert('内容を記入してください。');</script>";
 
-                    // POST処理の最後にリダイレクト処理
-                    header("Location:http://localhost:8888/input.php");
-                    exit();  }
-                    }
+        }elseif(strlen($_POST['title_name']) > 30){
+            echo $alert = "<script type='text/javascript'>alert('タイトルは30文字以下で記入してください');</script>";
+
+        }else{
+        //条件を全て満たしていたらファイルに書き込む
+        fwrite($fp, $write_str);
+        fwrite($fp_matome, $write_str);
+        fclose($fp);
+
+        // POST処理の最後にリダイレクト処理
+        header("Location:http://localhost:8888/input.php");
+        exit();  
+        }
+    }
 
                     
 
@@ -63,10 +64,9 @@
                         
                         $str = fgets($file);
                         print "$str<BR>";
-                    }
+    }
                         fclose($file);         
-
-        ?>
+?>
         
 
 	</body>
