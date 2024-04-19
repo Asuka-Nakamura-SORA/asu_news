@@ -39,8 +39,13 @@
         //post取得
         $fp = fopen("data/" . date("Ymd") . ".txt", "a");
         $fp_matome = fopen("matome/matome.txt", "a");
-        $write_str = $_POST['title_name'] . "\t" . $_POST['message_name'] . "\n";
-        
+        $title = $_POST['title_name'];
+        $message = $_POST['message_name'];
+
+        //id取得
+        while(have_posts()):the_post();
+        $post_id = get_the_ID();
+        endwhile;
 
         //条件をチェックする
         if(empty($_POST['title_name']) and empty($_POST['message_name'])){
@@ -57,10 +62,32 @@
            
         }else{
                
-        //条件を全て満たしたらファイルに書き込む
-        fwrite($fp, $write_str);
-        fwrite($fp_matome, $write_str);
+        // //条件を全て満たしたらファイルに書き込む
+        // $filename = "data.txt";
+        // $fp = fopen('data.txt', 'a');
+        // fwrite($fp, $write_title.PHP_EOL);
+        // fwrite($fp, $write_message.PHP_EOL);
+        // fclose($fp);
+
+        //id取得
+        // while(have_posts()):the_post();
+        // $post_id = get_the_ID();
+        // endwhile;
+
+        global $wp_query;
+$post_id = $wp_query->get_queried_object_id();
+
+        //　ファイルを開く
+        $filename = "matome/matome.txt";
+        $fp = fopen($filename, "a");
+
+        // ファイルに記入
+        $data = $title  . "\t" . $message;
+        fwrite($fp, $data.PHP_EOL);
+
+        // ファイルを閉じる
         fclose($fp);
+
 
         // POST処理の最後にリダイレクト処理
         header("Location:http://localhost:8888/input.php");
@@ -68,14 +95,15 @@
         }
     }
 
-        //ファイルを開いて表示
-        $fileName = "matome/matome.txt";    
-        $file = fopen($fileName, "r");
+        //ファイルを開いて表示 
+        $filename = "matome/matome.txt"; 
+        $file = fopen($filename, "r");
         while (!feof($file)) {
         $str = fgets($file);
         
         if(!empty($str)){
-            print "$str<BR>"."記事全文・コメントを読む<BR><BR>";
+            print "$str<BR>";
+            print '<a href="syousai.php">'."記事全文・コメントを読む<BR><BR>".'</a><br />';
         }
        }
         fclose($file);  
